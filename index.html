@@ -3,12 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aquamovil</title>
+    <title>Aquamovil</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0; /* Fondo claro */
+        }
+
+        h1 {
+            font-size: 36px; /* Tamaño del texto */
+            color: #2c3e50; /* Color del texto */
+            margin-bottom: 20px; /* Espaciado inferior */
+            text-align: center; /* Alinear el texto al centro */
+            font-family: Arial, sans-serif; /* Fuente del texto */
+        }
+    </style>
 </head>
-    <h1>Aquamovil</h1>
 <body>
+    <h1>Aquamovil</h1>
+    <div id="simulation-container"></div> <!-- Contenedor para la simulación -->
     <script>
         let bottle, cap, cup;
         let drops = [];
@@ -16,7 +36,8 @@
         const maxWaterLevel = 150; // Altura máxima del vaso (ajústala según sea necesario)
 
         function setup() {
-            createCanvas(400, 600);
+            const canvas = createCanvas(400, 600);
+            canvas.parent('simulation-container'); // Agregar el lienzo al contenedor
             // Inicializar objetos
             bottle = new Bottle(width / 2, height / 4);
             cap = new Cap(width / 2, height / 8);
