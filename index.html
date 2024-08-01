@@ -6,6 +6,7 @@
     <title>Aquamovil</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script> <!-- Añadir la biblioteca de sonido -->
     <style>
         body {
             display: flex;
@@ -22,7 +23,7 @@
             color: #2c3e50; /* Color del texto */
             margin-bottom: 20px; /* Espaciado inferior */
             text-align: center; /* Alinear el texto al centro */
-            font-family: 'Averta', sans-serif; /* Fuente del texto */
+            font-family: 'Averta', sans-serif; /* Cambiar la fuente a Averta */
         }
     </style>
 </head>
@@ -34,6 +35,11 @@
         let drops = [];
         let waterLevel = 0;
         const maxWaterLevel = 150; // Altura máxima del vaso (ajústala según sea necesario)
+        let waterSound; // Variable para el sonido de agua
+
+        function preload() {
+            waterSound = loadSound('C:\Users\aegon\Downloads\servir-agua-36771'); // Cargar el archivo de sonido de agua
+        }
 
         function setup() {
             const canvas = createCanvas(400, 600);
@@ -46,6 +52,8 @@
             for (let i = 0; i < 100; i++) {
                 drops.push(new Drop(random(width / 2 - 50, width / 2 + 50), random(-500, 0)));
             }
+            waterSound.setVolume(0.1); // Ajustar el volumen
+            waterSound.loop(); // Reproducir el sonido en bucle
         }
 
         function draw() {
