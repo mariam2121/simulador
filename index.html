@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aquamovil</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script>
     <style>
         body {
             display: flex;
@@ -15,67 +12,60 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #f0f0f0; /* Fondo claro */
         }
 
         h1 {
-            font-size: 36px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            text-align: center;
-            font-family: 'Averta', sans-serif;
+            font-size: 36px; /* Tamaño del texto */
+            color: #2c3e50; /* Color del texto */
+            margin-bottom: 20px; /* Espaciado inferior */
+            text-align: center; /* Alinear el texto al centro */
+            font-family: Arial, sans-serif; /* Fuente del texto */
         }
     </style>
 </head>
 <body>
     <h1>Aquamovil</h1>
-    <div id="simulation-container"></div>
-    <!-- Contenedor para la música -->
-    <div id="music-container" style="width: 0; height: 0; overflow: hidden;">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/IL004ScJXfc?autoplay=1&mute=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
+    <div id="simulation-container"></div> <!-- Contenedor para la simulación -->
     <script>
         let bottle, cap, cup;
         let drops = [];
         let waterLevel = 0;
-        const maxWaterLevel = 150;
-        let waterSound;
-
-        function preload() {
-            waterSound = loadSound('servir-agua-36771');
-        }
+        const maxWaterLevel = 150; // Altura máxima del vaso (ajústala según sea necesario)
 
         function setup() {
             const canvas = createCanvas(400, 600);
-            canvas.parent('simulation-container');
+            canvas.parent('simulation-container'); // Agregar el lienzo al contenedor
+            // Inicializar objetos
             bottle = new Bottle(width / 2, height / 4);
             cap = new Cap(width / 2, height / 8);
             cup = new Cup(width / 2, (3 * height) / 4, maxWaterLevel);
+            // Crear gotas de agua
             for (let i = 0; i < 100; i++) {
                 drops.push(new Drop(random(width / 2 - 50, width / 2 + 50), random(-500, 0)));
             }
-            waterSound.setVolume(0.1);
-            waterSound.loop();
         }
-
         function draw() {
             background(220);
+            // Dibujar objetos
             bottle.display();
             cap.display();
             cup.display();
+            // Dibujar y actualizar gotas de agua
             for (let i = drops.length - 1; i >= 0; i--) {
                 drops[i].update();
                 drops[i].display();
+                // Verificar si la gota cae dentro del vaso
                 if (drops[i].y > cup.y - cup.h / 2 && drops[i].x > cup.x - cup.w / 2 && drops[i].x < cup.x + cup.w / 2) {
-                    drops.splice(i, 1);
-                    waterLevel += 2;
-                    waterLevel = min(waterLevel, maxWaterLevel);
+                    drops.splice(i, 1); // Eliminar la gota
+                    waterLevel += 2; // Incrementa el nivel de agua (ajústalo según sea necesario)
+                    waterLevel = min(waterLevel, maxWaterLevel); // Limita el nivel de agua al máximo
                 }
             }
-            fill(0, 0, 255, 150);
+            // Dibujar el nivel de agua en el vaso
+            fill(0, 0, 255, 150); // Color del agua en el vaso
             rect(cup.x - cup.w / 2, cup.y + cup.h / 2 - waterLevel, cup.w, waterLevel, 10);
         }
-
         class Bottle {
             constructor(x, y) {
                 this.x = x;
@@ -85,8 +75,10 @@
             }
             
             display() {
+                // Dibujar la botella
                 fill(100, 100, 250, 150);
                 rect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h, 20);
+                // Dibujar las capas
                 let layers = [
                     { color: [139, 69, 19], label: "Restos de hojas", height: 40 },
                     { color: [210, 180, 140], label: "Arena", height: 40 },
@@ -101,14 +93,13 @@
                     fill(layer.color);
                     rect(this.x - this.w / 2, currentY, this.w, layer.height);
                     fill(0);
-                    textSize(min(layer.height / 4, 12));
+                    textSize(min(layer.height / 4, 12)); // Ajustar el tamaño del texto
                     textAlign(CENTER, CENTER);
                     text(layer.label, this.x, currentY + layer.height / 2);
                     currentY += layer.height;
                 }
             }
         }
-
         class Cap {
             constructor(x, y) {
                 this.x = x;
@@ -121,7 +112,6 @@
                 ellipse(this.x, this.y, this.r, this.r / 2);
             }
         }
-
         class Cup {
             constructor(x, y, maxHeight) {
                 this.x = x;
@@ -135,7 +125,6 @@
                 rect(this.x - this.w / 2, this.y - this.h / 2, this.w, this.h, 10);
             }
         }
-
         class Drop {
             constructor(x, y) {
                 this.x = x;
@@ -145,6 +134,7 @@
             
             update() {
                 this.y += this.speed;
+                // Reiniciar la posición si la gota sale de la pantalla
                 if (this.y > height) {
                     this.y = random(-100, 0);
                     this.x = random(width / 2 - 50, width / 2 + 50);
